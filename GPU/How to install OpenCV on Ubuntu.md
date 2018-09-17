@@ -1,4 +1,5 @@
 # Instructions on installing OpenCV on Ubuntu
+This instruction is from here: http://www.codebind.com/cpp-tutorial/install-opencv-ubuntu-cpp/
 
 ## Updating Ubuntu
 ```sh
@@ -39,5 +40,9 @@ $ make install
 $ ldconfig
 $ exit
 $ cd ~
+```
+
+## Check the version of OpenCV
+```sh
 $ pkg-config --modversion opencv
 ```
