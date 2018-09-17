@@ -9,7 +9,7 @@ $ nvcc -o nms.o -std=c++11 nms.cu  `pkg-config opencv --cflags --libs`
 ```
 
 Notes:
-1. -std=c++11: compile with c++11
+1. `-std=c++11`: compile with c++11
 2. `pkg-config opencv --cflags --libs`: specify the route of libraries
 
 ## Run a .o file
