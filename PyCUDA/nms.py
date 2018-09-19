@@ -5,6 +5,7 @@ import pycuda.driver as drv
 import string
 import tensorflow as tf
 import time
+import math
 
 template = """
 #define THETA $THETA
@@ -73,8 +74,20 @@ def cuda_nms(modules, boxes, scores, yxhw=False):
     count = boxes.shape[0]
     NMS_GPU = modules.get_function("NMS_GPU")
     #use drv.InOut instead of drv.Out so the value of results can be passed in
+    
+    #Setting1:works only when count<=1024
+    #grid_size, block_size = (1,count,1), (count,1,1)
+    
+    #Setting2:works when count>1024
+    #grid_size, block_size = (count,count,1), (1,1,1)
+    
+    #Setting3:works when count>1024, faster then Setting2
+    block_len = 32
+    grid_len = math.ceil(count/block_len)
+    grid_size, block_size = (grid_len,grid_len,1), (block_len,block_len,1)
+    
     NMS_GPU(drv.In(boxes), drv.InOut(results),
-           block=(count,1,1), grid=(1,count,1))
+            grid=grid_size, block=block_size)
     return list(np.where(results)[0])
     
 if __name__ == "__main__":
